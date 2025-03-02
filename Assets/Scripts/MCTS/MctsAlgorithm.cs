@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 
 namespace MCTS
 {
-    public class MCTS
+    public class MctsAlgorithm
     {
         private Node _root;
         private int _maxIterations;
         private bool _useParallel;
         private Random _random = new Random();
 
-        public MCTS(GameState initialState, int maxIterations, bool useParallel = true)
+        public MctsAlgorithm(GameState initialState, int maxIterations, bool useParallel = true)
         {
             _root = new Node(initialState);
             _maxIterations = maxIterations;
