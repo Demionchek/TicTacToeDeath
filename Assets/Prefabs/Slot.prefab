@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8756478782710577795}
   - component: {fileID: 2783611010652682533}
+  - component: {fileID: 6322656720988970173}
   m_Layer: 0
   m_Name: Slot
   m_TagString: Untagged
@@ -86,6 +87,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4, y: 4}
   m_EdgeRadius: 0
+--- !u!114 &6322656720988970173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8292589793172569532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0425014aa671a87409d5b436b5c3ff3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3056044309683559599
 PrefabInstance:
   m_ObjectHideFlags: 0

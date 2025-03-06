@@ -1,34 +1,26 @@
+
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class BoardController : MonoBehaviour, IPointerClickHandler
+public class BoardController : MonoBehaviour
 {
-    public static event Action<Transform> OnBoardSelected;
-    private Vector3 homeLocalPos;
 
-    private static Vector3 SELECTED_SCALE = new Vector3(3.0f, 3.0f, 3.0f);
+    [SerializeField] private GameObject backButton;
+    [SerializeField] private List<SlotController> slotControllers;
 
     private void Awake()
     {
-        homeLocalPos = transform.localPosition;
+        SlotController.OnSlotSelected += ShowBackButton;
     }
 
-    private void SetSelectedTransform()
-    {
-        transform.localPosition = homeLocalPos;
-        transform.localScale = SELECTED_SCALE;
-    }
+    public void ShowBackButton(Transform t) => gameObject.SetActive(true);
 
-    public void SetHomeTransform()
+    public void ShowBoards()
     {
-        transform.localPosition = homeLocalPos;
-        transform.localScale = Vector3.one;
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        SetSelectedTransform();
-        OnBoardSelected?.Invoke(transform);
+        foreach (SlotController slot in slotControllers)
+        {
+            slot.Show();
+        }
     }
 }
