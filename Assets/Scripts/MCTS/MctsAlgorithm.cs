@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Interfaces;
 
 namespace MCTS
 {
-    public class MctsAlgorithm
+    public class MctsAlgorithm : IMCTS
     {
         private Node _root;
         private int _maxIterations;
