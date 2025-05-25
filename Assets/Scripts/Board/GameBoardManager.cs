@@ -1,10 +1,13 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using Interfaces;
+using MCTS;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
+using Zenject;
 
-// Структура для хранения координат
-public struct BoardCoordinate
+public struct BoardCoordinate : IEquatable<BoardCoordinate>
 {
     public int SlotX;    // Номер слота (квадранта) по X (0-2)
     public int SlotY;    // Номер слота (квадранта) по Y (0-2)
@@ -12,23 +15,34 @@ public struct BoardCoordinate
     public int FieldY;   // Номер поля (ячейки) внутри слота по Y (0-2)
 
     public override string ToString() => $"Slot ({SlotX},{SlotY}), Field ({FieldX},{FieldY})";
+
+    public bool Equals(BoardCoordinate other)
+    {
+        return
+            SlotX == other.SlotX &&
+            SlotY == other.SlotY &&
+            FieldX == other.FieldX &&
+            FieldY == other.FieldY;
+    }
 }
 
-public class GameBoardManager : MonoBehaviour
+public class GameBoardManager : MonoBehaviour, IGameBoardManager
 {
-    // Словарь для хранения связки координат и GameObject
-    private Dictionary<BoardCoordinate, Field> _fieldObjects = new Dictionary<BoardCoordinate, Field>();
 
-    // Событие для обработки кликов (можно вызывать из других скриптов)
+    private Dictionary<BoardCoordinate, IField> _fieldObjects = new Dictionary<BoardCoordinate, IField>();
+    public Dictionary<BoardCoordinate, IField> FieldObjects  { get => _fieldObjects;}
+
     public UnityEvent<BoardCoordinate> OnFieldClicked = new UnityEvent<BoardCoordinate>();
 
-    private void Awake()
+    [Inject]
+    private GameState _gameState;
+
+    private void Start()
     {
-        InitializeBoard();
+        Initialize();
     }
 
-    // Инициализация доски
-    private void InitializeBoard()
+    public void Initialize()
     {
         for (int slotX = 0; slotX < 3; slotX++)
             for (int slotY = 0; slotY < 3; slotY++)
@@ -52,7 +66,7 @@ public class GameBoardManager : MonoBehaviour
                         };
 
                         GameObject fieldGO = slotTransform.Find($"Field_{fieldX}_{fieldY}")?.gameObject;
-                        Field field = fieldGO?.GetComponent<Field>();
+                        IField field = fieldGO?.GetComponent<IField>();
                         if (field == null)
                         {
                             Debug.LogError($"Не найдено поле Field_{fieldX}_{fieldY} в слоте {slotX},{slotY}!");
@@ -61,27 +75,37 @@ public class GameBoardManager : MonoBehaviour
 
                         _fieldObjects.Add(coord, field);
 
-                        //TODO: Прокинуть GameBoardManager всем Field
+                        field.SetBoardCoordinate(coord);
                     }
             }
     }
 
-    // Обработка клика на поле
-    private void HandleFieldClick(BoardCoordinate coord)
+    public void UpdateField(BoardCoordinate coord, Player player)
     {
-        Debug.Log($"Кликнуто: {coord}");
-        OnFieldClicked.Invoke(coord);
+        _fieldObjects.TryGetValue(coord, out IField field);
+
+        if (field == null)
+        {
+            Debug.LogError("UpdateField: No field found! coord is " + coord);
+            return;
+        }
+
+        field.SetField(player);
+
+        if (player == Player.O) HandleFieldClick(coord);
     }
 
-    // Получение GameObject поля по координатам
-    public Field GetField(BoardCoordinate coord)
+    public void HandleFieldClick(BoardCoordinate coord)
+    {
+        OnFieldClicked.Invoke(coord);
+
+        Move move = new Move { Quadrant = (coord.SlotX, coord.SlotY), Cell = (coord.FieldX, coord.SlotY), Player = Player.O };
+        _gameState.MakeMove(move);
+        MctsAlgorithm mctsAlgorithm = new MctsAlgorithm(_gameState, 2000, true);
+    }
+
+    public IField GetField(BoardCoordinate coord)
     {
         return _fieldObjects.TryGetValue(coord, out var field) ? field : null;
-    }
-
-    // Обновление визуального состояния поля
-    public void UpdateFieldVisual(BoardCoordinate coord, Player player)
-    {
-
     }
 }

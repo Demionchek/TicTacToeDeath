@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Interfaces;
 using UnityEngine;
 
-public class GameBoardCellsContainer : MonoBehaviour
+public class GameBoardCellsContainer : MonoBehaviour, IGameBoardCellsContainer
 {
-    public List<CellData> AllCells = new List<CellData>();
+    private List<CellData> AllCells = new List<CellData>();
+    public List<CellData> GetListCells(List<CellData> cells) => AllCells;
 }
 
 

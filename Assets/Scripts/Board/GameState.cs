@@ -29,8 +29,8 @@ public class GameState : IGameState
     public GameState()
     {
         for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            GlobalBoard[i, j] = new SmallBoard();
+            for (int j = 0; j < 3; j++)
+                GlobalBoard[i, j] = new SmallBoard();
     }
 
     // Копирование состояния (для MCTS)

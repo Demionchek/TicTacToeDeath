@@ -2,9 +2,10 @@ namespace Interfaces
 {
     public interface IGameState
     {
-        void MakeMove(Move move);
-        Player CurrentPlayer { get; }
-        Player? GlobalWinner { get; }
         SmallBoard[,] GlobalBoard { get; }
+        Player CurrentPlayer { get; }
+        Move? LastMove { get; }
+        Player? GlobalWinner { get; }
+        void MakeMove(Move move);
     }
 }

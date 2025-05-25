@@ -2,7 +2,7 @@ namespace Interfaces
 {
     public interface IGameBoardManager
     {
-        void Initialize();
-        void UpdateField(BoardCoordinate coord, Player player);
+        public void UpdateField(BoardCoordinate coord, Player player);
+        public IField GetField(BoardCoordinate coord);
     }
 }

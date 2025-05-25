@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1389911823945874114}
   - component: {fileID: 6306235713541539511}
-  - component: {fileID: 2625772505252953247}
+  - component: {fileID: 1442745575880464870}
   m_Layer: 0
   m_Name: Field
   m_TagString: Untagged
@@ -333,7 +333,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &2625772505252953247
+--- !u!114 &1442745575880464870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -345,3 +345,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12ced061fb054314a972030b4d956f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _circleGo: {fileID: 7665817052534219992}
+  _crossGo: {fileID: 1564675138413094965}
