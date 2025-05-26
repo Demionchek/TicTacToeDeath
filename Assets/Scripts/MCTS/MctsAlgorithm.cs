@@ -12,7 +12,7 @@ namespace MCTS
         private bool _useParallel;
         private Random _random = new Random();
 
-        public MctsAlgorithm(GameState initialState, int maxIterations, bool useParallel = true)
+        public MctsAlgorithm(IGameState initialState, int maxIterations, bool useParallel = true)
         {
             _root = new Node(initialState);
             _maxIterations = maxIterations;

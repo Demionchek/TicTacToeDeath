@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using Interfaces;
 using MCTS;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class GameBoardManager : MonoBehaviour, IGameBoardManager
     public UnityEvent<BoardCoordinate> OnFieldClicked = new UnityEvent<BoardCoordinate>();
 
     [Inject]
-    private GameState _gameState;
+    private IGameState _gameState;
 
     private void Start()
     {
@@ -99,9 +100,17 @@ public class GameBoardManager : MonoBehaviour, IGameBoardManager
     {
         OnFieldClicked.Invoke(coord);
 
-        Move move = new Move { Quadrant = (coord.SlotX, coord.SlotY), Cell = (coord.FieldX, coord.SlotY), Player = Player.O };
-        _gameState.MakeMove(move);
-        MctsAlgorithm mctsAlgorithm = new MctsAlgorithm(_gameState, 2000, true);
+        Move playerMove = CoordinateMapper.CoordinateToMove(coord, Player.O);
+        _gameState.MakeMove(playerMove);
+        MakeAiMove();
+    }
+
+    public void MakeAiMove()
+    {
+        MctsAlgorithm mctsAlgorithm = new MctsAlgorithm(_gameState, 2000, false);
+        Move aiMove = mctsAlgorithm.FindBestMove();
+        BoardCoordinate coordinate = CoordinateMapper.MoveToCoordinate(aiMove);
+        UpdateField(coordinate, Player.X);
     }
 
     public IField GetField(BoardCoordinate coord)

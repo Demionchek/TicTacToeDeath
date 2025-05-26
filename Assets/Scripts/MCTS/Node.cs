@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
+using Interfaces;
 
 namespace MCTS
 {
     public class Node
     {
-        public GameState State { get; }
+        public IGameState State { get; }
         public Node Parent { get; }
         public List<Node> Children { get; } = new List<Node>();
         public int Visits { get; private set; } = 0;
         public double Wins { get; private set; } = 0;
 
-        public Node(GameState state, Node parent = null)
+        public Node(IGameState state, Node parent = null)
         {
             State = state;
             Parent = parent;
